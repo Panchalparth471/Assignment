@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const  routes = require("./Routes/routes");
 const { database } = require("./Config/database");
 
 app.use(express.json());
