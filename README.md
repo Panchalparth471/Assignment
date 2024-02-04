@@ -1,5 +1,7 @@
 # Setting Up the Backend
 
+## Note:- You must have the required nodeJS environment for it
+
 For setting up the backend first of all install all required dependencies like jsonwebtoken, nodemon, bcrypt, express, mongoose.
 
 Configure your .env file <br>
