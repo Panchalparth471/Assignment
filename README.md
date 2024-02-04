@@ -1,9 +1,9 @@
 For setting up the backend first of all install all required dependencies like jsonwebtoken, nodemon, bcrypt, express, mongoose.
 
-Configure your .env file 
-1)PORT:- add your desired port number.
-2)JWT_SECRET:- add your secret for creating token.
-3)URL:- Your connection string to the database.
+Configure your .env file <br>
+1)PORT:- add your desired port number. <br>
+2)JWT_SECRET:- add your secret for creating token. <br>
+3)URL:- Your connection string to the database. <br>
 
 Configure your nodemon, edit your package.json and replace the script by,
  "scripts": {
