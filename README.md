@@ -11,9 +11,9 @@ Configure your nodemon, edit your package.json and replace the script by, <br>
  "scripts": { <br>
     "start": "node index.js", <br>
     "dev": "nodemon index.js" <br>
-  },
+  },<br>
 
-<br>
+
   Open the terminal and type,
   ``npm run dev`` 
   to start your server and the database
