@@ -6,12 +6,23 @@ const Order = require("../Models/Order");
 exports.getSellers = async (req, res) => {
     try {
 
-        const sellers = await User.find({ accountType: "sellers" });
+        const sellers = await User.find({ accountType: "seller" });
+
+        // Extract necessary fields
+        const sellerList = sellers.map(seller => {
+            return {
+                id: seller._id,
+                username: seller.username,
+                email:seller.email
+              
+            };
+        });
+
 
         return res.status(200).json({
             success: true,
             message: "List Fetched Successfully",
-            sellers: sellers
+            sellerList
         })
 
 
@@ -79,7 +90,7 @@ exports.createOrder = async (req, res) => {
             })
         }
 
-        const seller = await User.find({ _id: seller_id, accountType:"seller" });
+        const seller = await User.findOne({ _id: seller_id, accountType:"seller" });
         if (!seller)
         {
             return res.status(400).json({
@@ -91,17 +102,19 @@ exports.createOrder = async (req, res) => {
         const catalog = await Catalog.findOne({ seller: seller_id }).populate("products");
 
         //check if all items provided is sold by the seller
-        const validItems = items.filter(item => catalog.products.some(product => product.name === item.name && product.price === item.price));
+        const validItems = items.filter(item => catalog.products.some(product => product.name == item.name && product.price == item.price));
 
         // If some items are not found in the catalog, return error
-    if (validItems.length !== items.length) {
+        if (validItems.length !== items.length) {
         return res.status(400).json({
             success:false,
             message: "Some items are not available in the seller's catalog"
         });
         }
         
-        const newOrder = await Order.create({ buyer, seller, products: validItems });
+        //For all the matching items add their product ids in the productIds
+        const productIds = validItems.map(item => catalog.products.find(product => product.name == item.name && product.price == item.price)._id);
+        const newOrder = await Order.create({ buyer:req.user.id, seller, products: productIds });
         
         return res.status(200).json({
             success: true,
