@@ -1,5 +1,6 @@
 const Catalog = require("../Models/Catalog");
 const Order = require("../Models/Order");
+const Product = require("../Models/Product");
 
 
 //Creating a catalog
@@ -9,11 +10,24 @@ exports.createCatalog = async (req, res) => {
         const { items, name } = req.body;
         const id = req.user.id;
 
-        const createdCatalog = await Catalog.create({ seller: id, name: name, products: items });
+        //Creating a catalog with empty products
+         let createdCatalog = await Catalog.create({ seller: id, name: name, products: [] });
 
+
+        //Creating every product and pushing it into the Catalog
+          for (const item of items) {
+        const createdProduct = await Product.create({ name: item.name, price: item.price, catalog: createdCatalog._id });
+        createdCatalog.products.push(createdProduct);
+    }
+
+    // Save the updated catalog with the new products
+    await createdCatalog.save();
+        
+        
         return res.status(200).json({
             success: true,
-            createdCatalog: createdCatalog
+            message: "Catalog created successfully",
+            createdCatalog
         })
 
     }
@@ -33,7 +47,7 @@ exports.getOrder = async (req, res) => {
     try {
         const seller_id = req.user.id;
 
-        const existingOrder = Order.find({ seller: seller_id });
+        const existingOrder =await Order.find({ seller: seller_id });
 
 
         if (!existingOrder)
