@@ -15,6 +15,11 @@ const User = new mongoose.Schema({
         required: true,
         trim:true,
     },
+    confirmPassword: {
+        type: String,
+        required: true,
+        trim:true
+    },
     accountType: {
         type: String,
         enum: ['buyer', 'seller'],
