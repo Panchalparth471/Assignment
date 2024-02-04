@@ -113,7 +113,7 @@ exports.createOrder = async (req, res) => {
         }
         
         //For all the matching items add their product ids in the productIds
-        const productIds = validItems.map(item => catalog.products.some(product => product.name == item.name && product.price == item.price)._id);
+        const productIds = validItems.map(item => catalog.products.find(product => product.name == item.name && product.price == item.price)._id);
         const newOrder = await Order.create({ buyer:req.user.id, seller, products: productIds });
         
         return res.status(200).json({
